@@ -1,0 +1,33 @@
+import com.polek.DancingInstructor.Actor;
+import com.polek.DancingInstructor.Animation.*;
+
+Actor mainActor;
+Animation action;
+
+void setup() {
+	mainActor = new Actor(),
+	action = new Animation();
+	mainActor.changePose(POSE_UPRIGHT);
+	mainActor.loosenUp();
+	action.queue(new Step(
+		[mainActor.leftArm, mainActor.rightArm],
+		Animation.lift(TARGET_PERPENDICULAR)
+	));
+	action.queue(new Step(
+		mainActor.leftArm.allFingers,
+		Animation.bend(mainActor.leftArm.thumb);
+	), new Step(
+		mainActor.rightArm.allFingers,
+		Animation.bend(mainActor.rightArm.thumb);
+	));
+}
+
+void loop() {
+	action.play(function checkFinalPose() {
+		if (true === isComparable(mainActor.leftArm.hand.pose, TARGET_LOOKINGGLASS)) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+}
